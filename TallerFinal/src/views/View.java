@@ -8,6 +8,6 @@ package views;
  *
  * @author AlexisTobarR
  */
-public class OurView {
+public class View {
     
 }
