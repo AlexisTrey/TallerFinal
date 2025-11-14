@@ -11,9 +11,9 @@ package utilities;
  */
 public class Utilities {
 
-    // Ruta para el archivo JSON de los contactos
-    public static final String FILE_PATH_JSON = "src\\config\\tareas.json";
+    //Ruta para el archivo JSON
+    public static final String FILE_PATH_JSON = "src\\data\\tareas.json";
 
-    // Ruta al archivo Properties de configuración
-    public static final String FILE_PATH_PROPERTIES = "src\\config\\config.properties";
+    //Ruta al archivo Properties
+    public static final String FILE_PATH_PROPERTIES = "src\\data\\config.properties";
 }
