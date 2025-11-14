@@ -6,8 +6,9 @@ package views;
 
 /**
  *
- * @author AlexisTobarR
+ * @author Yulian Alexis Tobar Rios
+ * @author Hellen Valeria Melo Cubides
  */
-public class View {
+public class VentanaPrincipal {
     
 }
