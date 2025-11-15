@@ -1,4 +1,3 @@
-
 package views;
 
 import javax.swing.*;
@@ -7,11 +6,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import models.TareaEstado;
+
 /**
  * @author Yulian Alexis Tobar Rios
- *  @author Hellen Valeria Melo Cubides
+ * @author Hellen Valeria Melo Cubides
  */
-
 public class VentanaPrincipal extends JFrame {
 
     public JTextField txtTitulo, txtFechaLimite;
@@ -67,7 +66,7 @@ public class VentanaPrincipal extends JFrame {
         txtTitulo = crearTextFieldConPlaceholder("Título");
         txtFechaLimite = crearTextFieldConPlaceholder("Fecha límite (AAAA-MM-DD)");
 
-        txtDescripcion = new JTextArea("Descripción", 4, 20);
+        txtDescripcion = new JTextArea("Descripción", 8, 20);
         txtDescripcion.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         txtDescripcion.setForeground(Color.GRAY);
         txtDescripcion.setLineWrap(true);
@@ -118,155 +117,143 @@ public class VentanaPrincipal extends JFrame {
         tablaTareas.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
 
         scrollTabla = new JScrollPane(tablaTareas);
-scrollTabla.setPreferredSize(new Dimension(600, 240));    }
+        scrollTabla.setPreferredSize(new Dimension(600, 240));
+    }
 
     private void construirInterfaz() {
-    panelSuperior = new JPanel(new BorderLayout());
-    panelSuperior.setBorder(new EmptyBorder(16, 22, 16, 22));
 
-    JPanel panelInfo = new JPanel(new GridLayout(2, 1));
-    panelInfo.setOpaque(false);
-    panelInfo.add(lblUsuario);
-    panelInfo.add(lblTema);
+        panelSuperior = new JPanel(new BorderLayout());
+        panelSuperior.setBorder(new EmptyBorder(16, 22, 16, 22));
 
-    panelSuperior.add(lblTituloVentana, BorderLayout.WEST);
-    panelSuperior.add(panelInfo, BorderLayout.EAST);
+        JPanel panelInfo = new JPanel(new GridLayout(2, 1));
+        panelInfo.setOpaque(false);
+        panelInfo.add(lblUsuario);
+        panelInfo.add(lblTema);
 
-    JPanel panelNuevaTarea = new JPanel(new GridBagLayout());
-   panelNuevaTarea.setPreferredSize(new Dimension(680, 260));
+        panelSuperior.add(lblTituloVentana, BorderLayout.WEST);
+        panelSuperior.add(panelInfo, BorderLayout.EAST);
 
-    panelNuevaTarea.setBackground(Color.WHITE);
-    panelNuevaTarea.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(temas[indiceTema].border, 1, true),
-            new EmptyBorder(18, 18, 18, 18)
-    ));
+        JPanel panelNuevaTarea = new JPanel(new GridBagLayout());
+        panelNuevaTarea.setPreferredSize(new Dimension(680, 260));
+        panelNuevaTarea.setBackground(Color.WHITE);
 
-    GridBagConstraints c = new GridBagConstraints();
-    c.insets = new Insets(8, 8, 8, 8);
-    c.anchor = GridBagConstraints.WEST;
-    c.fill = GridBagConstraints.HORIZONTAL;
-    c.weightx = 1.0;
+        panelNuevaTarea.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(temas[indiceTema].border, 1, true),
+                new EmptyBorder(18, 18, 18, 18)
+        ));
 
-    int y = 0;
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(8, 8, 8, 8);
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
 
-    JLabel lblNuevaTarea = new JLabel("Nueva Tarea");
-    lblNuevaTarea.setFont(new Font("Segoe UI", Font.BOLD, 18));
-    c.gridx = 0;
-    c.gridy = y;
-    c.gridwidth = 3;
-    panelNuevaTarea.add(lblNuevaTarea, c);
+        int y = 0;
 
-y++;
-c.gridy = y;
-c.gridwidth = 3;
+        JLabel lblNuevaTarea = new JLabel("Nueva Tarea");
+        lblNuevaTarea.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        c.gridx = 0;
+        c.gridy = y;
+        c.gridwidth = 3;
+        panelNuevaTarea.add(lblNuevaTarea, c);
 
-c.fill = GridBagConstraints.HORIZONTAL;
-txtTitulo.setPreferredSize(new Dimension(400, 28)); 
-panelNuevaTarea.add(txtTitulo, c);
+        y++;
+        c.gridy = y;
+        panelNuevaTarea.add(txtTitulo, c);
 
-y++;
-c.gridy = y;
-txtFechaLimite.setPreferredSize(new Dimension(400, 28)); 
-panelNuevaTarea.add(txtFechaLimite, c);
+        y++;
+        c.gridy = y;
+        panelNuevaTarea.add(txtFechaLimite, c);
 
-y++;
-c.gridy = y;
-c.fill = GridBagConstraints.BOTH; 
-c.weighty = 1.0; 
-txtDescripcion.setLineWrap(true);
-txtDescripcion.setWrapStyleWord(true);
+        // descripción
+        y++;
+        c.gridy = y;
+        c.gridwidth = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 0;
 
-JScrollPane descScroll = new JScrollPane(txtDescripcion);
-descScroll.setPreferredSize(new Dimension(400, 120));
-panelNuevaTarea.add(descScroll, c);
+        JScrollPane descScroll = new JScrollPane(txtDescripcion);
+        descScroll.setPreferredSize(new Dimension(420, 180));
+        descScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-c.fill = GridBagConstraints.HORIZONTAL;
-c.weighty = 0;
+        c.fill = GridBagConstraints.BOTH;
+        c.weighty = 0.3;
 
-y++;
-c.gridy = y;
+        panelNuevaTarea.add(descScroll, c);
 
-JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT));
-panelEstado.setOpaque(false);
+        y++;
+        c.gridy = y;
+        JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelEstado.setOpaque(false);
+        panelEstado.add(rPendiente);
+        panelEstado.add(rProgreso);
+        panelEstado.add(rCompletada);
+        panelNuevaTarea.add(panelEstado, c);
 
-panelEstado.add(rPendiente);
-panelEstado.add(rProgreso);
-panelEstado.add(rCompletada);
+        y++;
+        c.gridy = y;
+        JPanel panelBtnsNuevaTarea = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
+        panelBtnsNuevaTarea.setOpaque(false);
+        panelBtnsNuevaTarea.add(btnAgregar);
+        panelBtnsNuevaTarea.add(btnLimpiar);
+        panelNuevaTarea.add(panelBtnsNuevaTarea, c);
 
-panelNuevaTarea.add(panelEstado, c);
+        JPanel panelTabla = new JPanel(new BorderLayout());
+        panelTabla.setPreferredSize(new Dimension(680, 340));
+        panelTabla.setBackground(Color.WHITE);
+        panelTabla.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(temas[indiceTema].border, 1, true),
+                new EmptyBorder(12, 12, 12, 12)
+        ));
 
-y++;
-c.gridy = y;
+        JLabel lblLista = new JLabel("Lista de Tareas Guardadas");
+        lblLista.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblLista.setBorder(new EmptyBorder(5, 0, 12, 0));
+        panelTabla.add(lblLista, BorderLayout.NORTH);
+        panelTabla.add(scrollTabla, BorderLayout.CENTER);
 
-JPanel panelBtnsNuevaTarea = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
-panelBtnsNuevaTarea.setOpaque(false);
+        JPanel panelBtnsTabla = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
+        panelBtnsTabla.setOpaque(false);
+        panelBtnsTabla.add(btnEditar);
+        panelBtnsTabla.add(btnEliminar);
+        panelBtnsTabla.add(btnGuardar);
+        panelTabla.add(panelBtnsTabla, BorderLayout.SOUTH);
 
-panelBtnsNuevaTarea.add(btnAgregar);
-panelBtnsNuevaTarea.add(btnLimpiar);
+        JPanel panelConfig = new JPanel();
+        panelConfig.setLayout(new BoxLayout(panelConfig, BoxLayout.Y_AXIS));
+        panelConfig.setBackground(Color.WHITE);
+        panelConfig.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(temas[indiceTema].border, 1, true),
+                new EmptyBorder(12, 16, 12, 16)
+        ));
 
-panelNuevaTarea.add(panelBtnsNuevaTarea, c);
+        JPanel panelTituloConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        panelTituloConfig.setOpaque(false);
+        JLabel lblConfig = new JLabel("Configuración");
+        lblConfig.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        panelTituloConfig.add(lblConfig);
+        panelConfig.add(panelTituloConfig);
+        panelConfig.add(Box.createVerticalStrut(10));
 
+        JPanel panelBtnsConfig = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 5));
+        panelBtnsConfig.setOpaque(false);
+        panelBtnsConfig.add(btnCambiarUsuario);
+        panelBtnsConfig.add(btnCambiarTema);
+        panelConfig.add(panelBtnsConfig);
 
+        JPanel panelCentro = new JPanel();
+        panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
+        panelCentro.setBorder(new EmptyBorder(14, 22, 18, 22));
 
-    JPanel panelTabla = new JPanel(new BorderLayout());
-    panelTabla.setPreferredSize(new Dimension(680, 340));
+        panelCentro.add(panelNuevaTarea);
+        panelCentro.add(Box.createVerticalStrut(18));
+        panelCentro.add(panelTabla);
+        panelCentro.add(Box.createVerticalStrut(18));
+        panelCentro.add(panelConfig);
 
-    panelTabla.setBackground(Color.WHITE);
-    panelTabla.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(temas[indiceTema].border, 1, true),
-            new EmptyBorder(12, 12, 12, 12)
-    ));
-
-    JLabel lblLista = new JLabel("Lista de Tareas Guardadas");
-    lblLista.setFont(new Font("Segoe UI", Font.BOLD, 18));
-    lblLista.setBorder(new EmptyBorder(5, 0, 12, 0));
-    panelTabla.add(lblLista, BorderLayout.NORTH);
-    panelTabla.add(scrollTabla, BorderLayout.CENTER);
-
-    JPanel panelBtnsTabla = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
-    panelBtnsTabla.setOpaque(false);
-    panelBtnsTabla.add(btnEditar);
-    panelBtnsTabla.add(btnEliminar);
-    panelBtnsTabla.add(btnGuardar);
-    panelTabla.add(panelBtnsTabla, BorderLayout.SOUTH);
-
-    JPanel panelConfig = new JPanel();
-    panelConfig.setLayout(new BoxLayout(panelConfig, BoxLayout.Y_AXIS));
-    panelConfig.setBackground(Color.WHITE);
-    panelConfig.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(temas[indiceTema].border, 1, true),
-            new EmptyBorder(12, 16, 12, 16)
-    ));
-
-    JPanel panelTituloConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    panelTituloConfig.setOpaque(false);
-    JLabel lblConfig = new JLabel("Configuración");
-    lblConfig.setFont(new Font("Segoe UI", Font.BOLD, 18));
-    panelTituloConfig.add(lblConfig);
-    panelConfig.add(panelTituloConfig);
-    panelConfig.add(Box.createVerticalStrut(10));
-
-    JPanel panelBtnsConfig = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 5));
-    panelBtnsConfig.setOpaque(false);
-    panelBtnsConfig.add(btnCambiarUsuario);
-    panelBtnsConfig.add(btnCambiarTema);
-    panelConfig.add(panelBtnsConfig);
-
-    JPanel panelCentro = new JPanel();
-    panelCentro.setLayout(new BoxLayout(panelCentro, BoxLayout.Y_AXIS));
-    panelCentro.setBorder(new EmptyBorder(14, 22, 18, 22));
-
-    panelCentro.add(panelNuevaTarea);
-    panelCentro.add(Box.createVerticalStrut(18));
-    panelCentro.add(panelTabla);
-    panelCentro.add(Box.createVerticalStrut(18));
-    panelCentro.add(panelConfig);
-
-    add(panelSuperior, BorderLayout.NORTH);
-    add(panelCentro, BorderLayout.CENTER);
-
-   
-}
+        add(panelSuperior, BorderLayout.NORTH);
+        add(panelCentro, BorderLayout.CENTER);
+    }
 
     private JTextField crearTextFieldConPlaceholder(String placeholder) {
         JTextField field = new JTextField(placeholder);
@@ -353,92 +340,101 @@ panelNuevaTarea.add(panelBtnsNuevaTarea, c);
             border = br;
         }
     }
+
     public JTextField getTxtTitulo() {
-    return txtTitulo;
-}
+        return txtTitulo;
+    }
 
-public JTextField getTxtFechaLimite() {
-    return txtFechaLimite;
-}
+    public JTextField getTxtFechaLimite() {
+        return txtFechaLimite;
+    }
 
-public JTextArea getTxtDescripcion() {
-    return txtDescripcion;
-}
-public JRadioButton getRPendiente() {
-    return rPendiente;
-}
+    public JTextArea getTxtDescripcion() {
+        return txtDescripcion;
+    }
 
-public JRadioButton getRProgreso() {
-    return rProgreso;
-}
+    public JRadioButton getRPendiente() {
+        return rPendiente;
+    }
 
-public JRadioButton getRCompletada() {
-    return rCompletada;
-}
+    public JRadioButton getRProgreso() {
+        return rProgreso;
+    }
 
-public TareaEstado getEstadoSeleccionado() {
-    if (rPendiente.isSelected()) return TareaEstado.PENDIENTE;
-    if (rProgreso.isSelected()) return TareaEstado.EN_PROGRESO;
-    return TareaEstado.COMPLETADA;
-}
-public JTable getTablaTareas() {
-    return tablaTareas;
-}
-public JButton getBtnAgregar() {
-    return btnAgregar;
-}
+    public JRadioButton getRCompletada() {
+        return rCompletada;
+    }
 
-public JButton getBtnLimpiar() {
-    return btnLimpiar;
-}
+    public TareaEstado getEstadoSeleccionado() {
+        if (rPendiente.isSelected()) {
+            return TareaEstado.PENDIENTE;
+        }
+        if (rProgreso.isSelected()) {
+            return TareaEstado.EN_PROGRESO;
+        }
+        return TareaEstado.COMPLETADA;
+    }
 
-public JButton getBtnEditar() {
-    return btnEditar;
-}
+    public JTable getTablaTareas() {
+        return tablaTareas;
+    }
 
-public JButton getBtnEliminar() {
-    return btnEliminar;
-}
+    public JButton getBtnAgregar() {
+        return btnAgregar;
+    }
 
-public JButton getBtnGuardar() {
-    return btnGuardar;
-}
+    public JButton getBtnLimpiar() {
+        return btnLimpiar;
+    }
 
-public JButton getBtnCambiarUsuario() {
-    return btnCambiarUsuario;
-}
+    public JButton getBtnEditar() {
+        return btnEditar;
+    }
 
-public JButton getBtnCambiarTema() {
-    return btnCambiarTema;
-}
+    public JButton getBtnEliminar() {
+        return btnEliminar;
+    }
 
-public JLabel getLblUsuario() {
-    return lblUsuario;
-}
+    public JButton getBtnGuardar() {
+        return btnGuardar;
+    }
 
-public JLabel getLblTema() {
-    return lblTema;
-}
- public int getIndiceTema() {
-    return indiceTema;
-}
+    public JButton getBtnCambiarUsuario() {
+        return btnCambiarUsuario;
+    }
 
-public void setIndiceTema(int indice) {
-    this.indiceTema = indice;
-    aplicarTemaActual();
-}
-public void limpiarCampos() {
-    txtTitulo.setText("Título");
-    txtTitulo.setForeground(Color.GRAY);
+    public JButton getBtnCambiarTema() {
+        return btnCambiarTema;
+    }
 
-    txtFechaLimite.setText("Fecha límite (AAAA-MM-DD)");
-    txtFechaLimite.setForeground(Color.GRAY);
+    public JLabel getLblUsuario() {
+        return lblUsuario;
+    }
 
-    txtDescripcion.setText("Descripción");
-    txtDescripcion.setForeground(Color.GRAY);
+    public JLabel getLblTema() {
+        return lblTema;
+    }
 
-    rPendiente.setSelected(true);
-}
+    public int getIndiceTema() {
+        return indiceTema;
+    }
 
-   
+    public void setIndiceTema(int indice) {
+        this.indiceTema = indice;
+        aplicarTemaActual();
+    }
+
+    public void limpiarCampos() {
+        txtTitulo.setText("Título");
+        txtTitulo.setForeground(Color.GRAY);
+
+        txtFechaLimite.setText("Fecha límite (AAAA-MM-DD)");
+        txtFechaLimite.setForeground(Color.GRAY);
+
+        txtDescripcion.setText("Descripción");
+        txtDescripcion.setForeground(Color.GRAY);
+
+        rPendiente.setSelected(true);
+    }
+
 }

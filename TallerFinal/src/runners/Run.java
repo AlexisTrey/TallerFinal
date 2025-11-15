@@ -7,11 +7,12 @@ package runners;
 import controllers.Controller;
 
 /**
-* @author Yulian Alexis Tobar Rios
+ * @author Yulian Alexis Tobar Rios
  * @author Hellen Valeria Melo Cubides
  */
 public class Run {
-  public static void main(String[] args) {
+
+    public static void main(String[] args) {
         Controller controller = new Controller();
         controller.init();
     }

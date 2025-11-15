@@ -10,6 +10,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import utilities.Utilities;
 
+/**
+ *
+ * @author Yulian Alexis Tobar Rios
+ * @author Hellen Valeria Melo Cubides
+ */
 public class Controller {
 
     private VentanaPrincipal vista;

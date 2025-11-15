@@ -1,8 +1,20 @@
 [
   {
     "titulo": "Fisica",
-    "descripcion": "Descripción",
+    "descripcion": "Temódinámica",
     "fechaLimite": "2025-11-13",
     "estado": "EN_PROGRESO"
+  },
+  {
+    "titulo": "Química",
+    "descripcion": "Método",
+    "fechaLimite": "15-12-2025",
+    "estado": "EN_PROGRESO"
+  },
+  {
+    "titulo": "Matemáticas",
+    "descripcion": "Operacións Básiacas",
+    "fechaLimite": "11-12-2025",
+    "estado": "COMPLETADA"
   }
 ]
