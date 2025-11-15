@@ -1,154 +1,179 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import models.*;
+import persistence.Configuration;
 import views.VentanaPrincipal;
 
-/**
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import utilities.Utilities;
 
- * @author Yulian Alexis Tobar Rios
- *  @author Hellen Valeria Melo Cubides
- */
-public class Controller implements ActionListener{
+public class Controller {
+
     private VentanaPrincipal vista;
+    private GestorTareas gestor;
+    private Configuration config;
 
-    public Controller(VentanaPrincipal vista) {
-        this.vista = vista;
-        inicializarEventos();
+    private final Path archivoTareas = Paths.get(Utilities.FILE_PATH_JSON);
+    private final Path archivoConfig = Paths.get(Utilities.FILE_PATH_PROPERTIES);
+
+    public Controller() {
+        gestor = new GestorTareas();
+        config = new Configuration(archivoConfig.toString());
     }
 
-    /**
-     * Asigna los ActionCommands a cada botón y registra el listener.
-     */
-    private void inicializarEventos() {
-        vista.btnAgregar.setActionCommand("AGREGAR");
-        vista.btnLimpiar.setActionCommand("LIMPIAR");
-        vista.btnEditar.setActionCommand("EDITAR");
-        vista.btnEliminar.setActionCommand("ELIMINAR");
-        vista.btnGuardar.setActionCommand("GUARDAR");
-        vista.btnCambiarUsuario.setActionCommand("CAMBIAR_USUARIO");
-        vista.btnCambiarTema.setActionCommand("CAMBIAR_TEMA");
+    public void init() {
 
-        vista.btnAgregar.addActionListener(this);
-        vista.btnLimpiar.addActionListener(this);
-        vista.btnEditar.addActionListener(this);
-        vista.btnEliminar.addActionListener(this);
-        vista.btnGuardar.addActionListener(this);
-        vista.btnCambiarUsuario.addActionListener(this);
-        vista.btnCambiarTema.addActionListener(this);
+        gestor.cargar(archivoTareas);
+
+        vista = new VentanaPrincipal();
+
+        cargarConfiguracion();
+
+        cargarTabla();
+
+        configurarEventos();
+
+        vista.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String comando = e.getActionCommand();
+    private void cargarConfiguracion() {
+        String usuario = config.get("usuario", "Usuario");
+        int tema = Integer.parseInt(config.get("tema", "0"));
 
-        switch (comando) {
+        vista.getLblUsuario().setText("Usuario: " + usuario);
+        vista.setIndiceTema(tema);
+    }
 
-            case "AGREGAR":
-                agregarTarea();
-                break;
+    private void guardarConfiguracion() {
+        config.set("usuario", vista.getLblUsuario().getText().replace("Usuario: ", ""));
+        config.set("tema", String.valueOf(vista.getIndiceTema()));
+    }
 
-            case "LIMPIAR":
-                limpiarCampos();
-                break;
+    private void cargarTabla() {
+        DefaultTableModel model = (DefaultTableModel) vista.getTablaTareas().getModel();
+        model.setRowCount(0);
 
-            case "EDITAR":
-                editarTarea();
-                break;
-
-            case "ELIMINAR":
-                eliminarTarea();
-                break;
-
-            case "GUARDAR":
-                guardarCambios();
-                break;
-
-            case "CAMBIAR_USUARIO":
-                cambiarUsuario();
-                break;
-
-            case "CAMBIAR_TEMA":
-                cambiarTema();
-                break;
-
-            default:
-                JOptionPane.showMessageDialog(vista, "Acción no reconocida: " + comando);
+        for (Tarea t : gestor.getTareas()) {
+            model.addRow(new Object[]{
+                t.getTitulo(),
+                t.getFechaLimite(),
+                t.getEstado()
+            });
         }
     }
-
-    // ============================================================
-    // Métodos individuales (vacíos por ahora, con comentarios guía)
-    // ============================================================
 
     private void agregarTarea() {
-        // Validaciones básicas de los campos
-        String titulo = vista.txtTitulo.getText().trim();
-        String fecha = vista.txtFechaLimite.getText().trim();
-        String descripcion = vista.txtDescripcion.getText().trim();
+        String titulo = vista.getTxtTitulo().getText().trim();
+        String desc = vista.getTxtDescripcion().getText().trim();
+        String fecha = vista.getTxtFechaLimite().getText().trim();
 
-        if (titulo.isEmpty() || titulo.equals("Título")) {
-            JOptionPane.showMessageDialog(vista, "Por favor, ingresa un título para la tarea.");
-            return;
-        }
-        if (fecha.isEmpty() || fecha.equals("Fecha límite (AAAA-MM-DD)")) {
-            JOptionPane.showMessageDialog(vista, "Por favor, ingresa una fecha válida.");
+        if (titulo.equals("Título") || titulo.isEmpty()) {
+            JOptionPane.showMessageDialog(vista, "Debe ingresar un título.");
             return;
         }
 
-        String estado = "Pendiente";
-        if (vista.rProgreso.isSelected()) estado = "En progreso";
-        else if (vista.rCompletada.isSelected()) estado = "Completada";
+        if (fecha.equals("Fecha límite (AAAA-MM-DD)") || fecha.isEmpty()) {
+            JOptionPane.showMessageDialog(vista, "Debe ingresar una fecha.");
+            return;
+        }
 
-        // Aquí luego se creará una nueva Tarea y se guardará usando GestorTareas
-        JOptionPane.showMessageDialog(vista,
-                "Tarea agregada:\n" +
-                        "Título: " + titulo + "\n" +
-                        "Fecha: " + fecha + "\n" +
-                        "Estado: " + estado + "\n" +
-                        "Descripción: " + descripcion);
-    }
+        Tarea nueva = new Tarea(titulo, desc, fecha, vista.getEstadoSeleccionado());
 
-    private void limpiarCampos() {
-        vista.txtTitulo.setText("Título");
-        vista.txtTitulo.setForeground(java.awt.Color.GRAY);
-        vista.txtFechaLimite.setText("Fecha límite (AAAA-MM-DD)");
-        vista.txtFechaLimite.setForeground(java.awt.Color.GRAY);
-        vista.txtDescripcion.setText("Descripción");
-        vista.txtDescripcion.setForeground(java.awt.Color.GRAY);
-        vista.rPendiente.setSelected(true);
-    }
+        gestor.agregarTarea(nueva);
+        gestor.guardar(archivoTareas);
 
-    private void editarTarea() {
-        // Aquí luego se obtendrá la tarea seleccionada en la tabla y se editará
-        JOptionPane.showMessageDialog(vista, "Editar tarea (lógica pendiente)");
+        cargarTabla();
+        vista.limpiarCampos();
+
+        JOptionPane.showMessageDialog(vista, "Tarea agregada.");
     }
 
     private void eliminarTarea() {
-        // Aquí luego se eliminará la tarea seleccionada de la tabla y del archivo JSON
-        JOptionPane.showMessageDialog(vista, "Eliminar tarea (lógica pendiente)");
+        int fila = vista.getTablaTareas().getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione una tarea.");
+            return;
+        }
+
+        gestor.eliminarTarea(fila);
+        gestor.guardar(archivoTareas);
+        cargarTabla();
+    }
+
+    private void cargarTareaEnCampos() {
+        int fila = vista.getTablaTareas().getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione una tarea.");
+            return;
+        }
+
+        Tarea t = gestor.getTareas().get(fila);
+
+        vista.getTxtTitulo().setText(t.getTitulo());
+        vista.getTxtTitulo().setForeground(java.awt.Color.BLACK);
+
+        vista.getTxtDescripcion().setText(t.getDescripcion());
+        vista.getTxtDescripcion().setForeground(java.awt.Color.BLACK);
+
+        vista.getTxtFechaLimite().setText(t.getFechaLimite());
+        vista.getTxtFechaLimite().setForeground(java.awt.Color.BLACK);
+
+        switch (t.getEstado()) {
+            case PENDIENTE ->
+                vista.getRPendiente().setSelected(true);
+            case EN_PROGRESO ->
+                vista.getRProgreso().setSelected(true);
+            case COMPLETADA ->
+                vista.getRCompletada().setSelected(true);
+        }
     }
 
     private void guardarCambios() {
-        // Aquí luego se guardarán todas las tareas actualizadas usando GestorTareas
-        JOptionPane.showMessageDialog(vista, "Guardar cambios (lógica pendiente)");
+        int fila = vista.getTablaTareas().getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione una tarea.");
+            return;
+        }
+
+        String titulo = vista.getTxtTitulo().getText().trim();
+        String desc = vista.getTxtDescripcion().getText().trim();
+        String fecha = vista.getTxtFechaLimite().getText().trim();
+
+        Tarea nueva = new Tarea(titulo, desc, fecha, vista.getEstadoSeleccionado());
+
+        gestor.editarTarea(fila, nueva);
+        gestor.guardar(archivoTareas);
+
+        cargarTabla();
+        vista.limpiarCampos();
+
+        JOptionPane.showMessageDialog(vista, "Cambios guardados.");
     }
 
     private void cambiarUsuario() {
-        String nuevoUsuario = JOptionPane.showInputDialog(vista, "Ingrese el nuevo nombre de usuario:");
-        if (nuevoUsuario != null && !nuevoUsuario.trim().isEmpty()) {
-            vista.lblUsuario.setText("Usuario: " + nuevoUsuario);
-            JOptionPane.showMessageDialog(vista, "Usuario cambiado a: " + nuevoUsuario);
+        String nuevo = JOptionPane.showInputDialog(vista, "Nuevo usuario:");
+        if (nuevo != null && !nuevo.trim().isEmpty()) {
+            vista.getLblUsuario().setText("Usuario: " + nuevo.trim());
+            guardarConfiguracion();
         }
     }
 
     private void cambiarTema() {
-        // Llama al método que ya tienes en VentanaPrincipal
-        vista.btnCambiarTema.doClick();
+        vista.setIndiceTema((vista.getIndiceTema() + 1) % 5);
+        guardarConfiguracion();
+    }
+
+    private void configurarEventos() {
+
+        vista.getBtnAgregar().addActionListener(e -> agregarTarea());
+        vista.getBtnEliminar().addActionListener(e -> eliminarTarea());
+        vista.getBtnEditar().addActionListener(e -> cargarTareaEnCampos());
+        vista.getBtnGuardar().addActionListener(e -> guardarCambios());
+        vista.getBtnLimpiar().addActionListener(e -> vista.limpiarCampos());
+        vista.getBtnCambiarUsuario().addActionListener(e -> cambiarUsuario());
+        vista.getBtnCambiarTema().addActionListener(e -> cambiarTema());
     }
 }

@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "titulo": "Fisica",
+    "descripcion": "Descripción",
+    "fechaLimite": "2025-11-13",
+    "estado": "EN_PROGRESO"
+  }
+]

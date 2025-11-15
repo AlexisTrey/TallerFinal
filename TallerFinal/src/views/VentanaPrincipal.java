@@ -6,6 +6,7 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import models.TareaEstado;
 /**
  * @author Yulian Alexis Tobar Rios
  *  @author Hellen Valeria Melo Cubides
@@ -117,8 +118,7 @@ public class VentanaPrincipal extends JFrame {
         tablaTareas.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
 
         scrollTabla = new JScrollPane(tablaTareas);
-        scrollTabla.setPreferredSize(new Dimension(600, 160));
-    }
+scrollTabla.setPreferredSize(new Dimension(600, 240));    }
 
     private void construirInterfaz() {
     panelSuperior = new JPanel(new BorderLayout());
@@ -133,6 +133,8 @@ public class VentanaPrincipal extends JFrame {
     panelSuperior.add(panelInfo, BorderLayout.EAST);
 
     JPanel panelNuevaTarea = new JPanel(new GridBagLayout());
+   panelNuevaTarea.setPreferredSize(new Dimension(680, 260));
+
     panelNuevaTarea.setBackground(Color.WHITE);
     panelNuevaTarea.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(temas[indiceTema].border, 1, true),
@@ -181,7 +183,34 @@ panelNuevaTarea.add(descScroll, c);
 c.fill = GridBagConstraints.HORIZONTAL;
 c.weighty = 0;
 
+y++;
+c.gridy = y;
+
+JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.LEFT));
+panelEstado.setOpaque(false);
+
+panelEstado.add(rPendiente);
+panelEstado.add(rProgreso);
+panelEstado.add(rCompletada);
+
+panelNuevaTarea.add(panelEstado, c);
+
+y++;
+c.gridy = y;
+
+JPanel panelBtnsNuevaTarea = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
+panelBtnsNuevaTarea.setOpaque(false);
+
+panelBtnsNuevaTarea.add(btnAgregar);
+panelBtnsNuevaTarea.add(btnLimpiar);
+
+panelNuevaTarea.add(panelBtnsNuevaTarea, c);
+
+
+
     JPanel panelTabla = new JPanel(new BorderLayout());
+    panelTabla.setPreferredSize(new Dimension(680, 340));
+
     panelTabla.setBackground(Color.WHITE);
     panelTabla.setBorder(BorderFactory.createCompoundBorder(
             new LineBorder(temas[indiceTema].border, 1, true),
@@ -236,10 +265,7 @@ c.weighty = 0;
     add(panelSuperior, BorderLayout.NORTH);
     add(panelCentro, BorderLayout.CENTER);
 
-    btnCambiarTema.addActionListener(e -> {
-        indiceTema = (indiceTema + 1) % temas.length;
-        aplicarTemaActual();
-    });
+   
 }
 
     private JTextField crearTextFieldConPlaceholder(String placeholder) {
@@ -327,8 +353,92 @@ c.weighty = 0;
             border = br;
         }
     }
+    public JTextField getTxtTitulo() {
+    return txtTitulo;
+}
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
-    }
+public JTextField getTxtFechaLimite() {
+    return txtFechaLimite;
+}
+
+public JTextArea getTxtDescripcion() {
+    return txtDescripcion;
+}
+public JRadioButton getRPendiente() {
+    return rPendiente;
+}
+
+public JRadioButton getRProgreso() {
+    return rProgreso;
+}
+
+public JRadioButton getRCompletada() {
+    return rCompletada;
+}
+
+public TareaEstado getEstadoSeleccionado() {
+    if (rPendiente.isSelected()) return TareaEstado.PENDIENTE;
+    if (rProgreso.isSelected()) return TareaEstado.EN_PROGRESO;
+    return TareaEstado.COMPLETADA;
+}
+public JTable getTablaTareas() {
+    return tablaTareas;
+}
+public JButton getBtnAgregar() {
+    return btnAgregar;
+}
+
+public JButton getBtnLimpiar() {
+    return btnLimpiar;
+}
+
+public JButton getBtnEditar() {
+    return btnEditar;
+}
+
+public JButton getBtnEliminar() {
+    return btnEliminar;
+}
+
+public JButton getBtnGuardar() {
+    return btnGuardar;
+}
+
+public JButton getBtnCambiarUsuario() {
+    return btnCambiarUsuario;
+}
+
+public JButton getBtnCambiarTema() {
+    return btnCambiarTema;
+}
+
+public JLabel getLblUsuario() {
+    return lblUsuario;
+}
+
+public JLabel getLblTema() {
+    return lblTema;
+}
+ public int getIndiceTema() {
+    return indiceTema;
+}
+
+public void setIndiceTema(int indice) {
+    this.indiceTema = indice;
+    aplicarTemaActual();
+}
+public void limpiarCampos() {
+    txtTitulo.setText("Título");
+    txtTitulo.setForeground(Color.GRAY);
+
+    txtFechaLimite.setText("Fecha límite (AAAA-MM-DD)");
+    txtFechaLimite.setForeground(Color.GRAY);
+
+    txtDescripcion.setText("Descripción");
+    txtDescripcion.setForeground(Color.GRAY);
+
+    rPendiente.setSelected(true);
+}
+
+   
 }
