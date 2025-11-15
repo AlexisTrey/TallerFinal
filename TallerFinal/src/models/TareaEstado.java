@@ -6,8 +6,11 @@ package models;
 
 /**
  *
- * @author AlexisTobarR
+ * @author Yulian Alexis Tobar Rios
+ * @author Hellen Valeria Melo Cubides
  */
-public class Model {
-    
+public enum TareaEstado {
+    PENDIENTE,
+    EN_PROGRESO,
+    COMPLETADA;
 }
