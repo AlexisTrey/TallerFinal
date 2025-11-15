@@ -5,8 +5,8 @@
 package runners;
 
 /**
- *
- * @author AlexisTobarR
+ * @author Yulian Alexis Tobar Rios
+ * @author Hellen Valeria Melo Cubides
  */
 public class Run {
     
